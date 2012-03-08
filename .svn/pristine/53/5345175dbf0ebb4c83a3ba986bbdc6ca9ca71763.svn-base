@@ -1,0 +1,47 @@
+/****************************************************************************
+    AUTHOR: Shaun Katz
+            University of Cape Town (UCT)
+            Department of Electrical Engineering
+            Software Defined Radio Group (SDRG)
+    DATE:   02/03/2012
+****************************************************************************/
+
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
+
+#include "archivetreeview.h"
+
+#include <QMainWindow>
+#include <QGraphicsScene>
+
+namespace Ui {
+    class MainWindow;
+}
+
+class MainWindow : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    explicit MainWindow(QWidget *parent = 0);
+    ~MainWindow();
+
+protected:
+    void changeEvent(QEvent *e);
+
+private:
+    Ui::MainWindow *ui;
+    QGraphicsScene* scene;
+    QGraphicsView* view;
+    QAction* action_open;
+    ArchiveTreeView* treeView;
+
+private slots:
+    void actionOpen_Triggered();
+    void parse(QString file_name);
+    void refreshTreeView();
+    void treeView_doubleClicked(QModelIndex index);
+    void slider_valueChanged(int value);
+};
+
+#endif // MAINWINDOW_H

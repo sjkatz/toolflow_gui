@@ -1,0 +1,187 @@
+/****************************************************************************
+    AUTHOR: Shaun Katz
+            University of Cape Town (UCT)
+            Department of Electrical Engineering
+            Software Defined Radio Group (SDRG)
+    DATE:   02/03/2012
+****************************************************************************/
+
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
+
+#include "component.h"
+
+#include <QGraphicsView>
+#include <QGraphicsRectItem>
+#include <QFileDialog>
+#include <QFileInfo>
+#include <QDomDocument>
+#include <QDomElement>
+#include <QDebug>
+
+MainWindow::MainWindow(QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
+{
+    ui->setupUi(this);
+
+    action_open = ui->mainToolBar->addAction("Open");
+    //graphicsView_Container
+    QGridLayout* layout = new QGridLayout(ui->graphicsView_Container);
+    view = new QGraphicsView();
+    layout->addWidget(view);
+
+    scene = new QGraphicsScene();
+    view->setScene(scene);
+    scene = view->scene();
+    view->scale(10,10);
+
+    layout = new QGridLayout(ui->treeView_Container);
+    ui->treeView_Container->setMaximumWidth(150);
+    treeView = new ArchiveTreeView();
+    layout->addWidget(treeView);
+    refreshTreeView();
+    treeView->acceptDrops();
+
+    connect(action_open,SIGNAL(triggered()), this, SLOT(actionOpen_Triggered()));
+    connect(treeView,SIGNAL(doubleClicked(QModelIndex)), this, SLOT(treeView_doubleClicked(QModelIndex)));
+    connect(ui->verticalSlider,SIGNAL(valueChanged(int)), this, SLOT(slider_valueChanged(int)));
+ }
+
+MainWindow::~MainWindow()
+{
+    delete treeView;
+    delete action_open;
+    delete scene;
+    delete ui;
+}
+
+void MainWindow::changeEvent(QEvent *e)
+{
+    QMainWindow::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        ui->retranslateUi(this);
+        break;
+    default:
+        break;
+    }
+}
+
+void MainWindow::actionOpen_Triggered()
+{
+    QString fileName = QFileDialog::getOpenFileName(
+            this,
+            tr("Open File"),
+            QApplication::applicationDirPath(),
+            tr("All Files(*.*)") );
+
+    if(fileName.isEmpty())
+        return;
+
+    parse(fileName);
+}
+
+void MainWindow::parse(QString file_name)
+{
+    QDomDocument doc("mydocument");
+    QFile file(file_name);
+    if (!file.open(QIODevice::ReadOnly))
+        return;
+    if (!doc.setContent(&file)) {
+        file.close();
+        return;
+    }
+    file.close();
+
+    // print out the element names of all elements that are direct children
+    // of the outermost element.
+    QDomElement docElem = doc.documentElement();
+    QDomNodeList nodeList = docElem.elementsByTagName("pin");
+    QDomElement rect = docElem.elementsByTagName("rect").at(0).toElement();
+    Component* comp1 = new Component(docElem.attribute("name"));
+    QRectF rectf(rect.attribute("x").toInt()/10,rect.attribute("y").toInt()/10,rect.attribute("width").toInt()/10,rect.attribute("height").toInt()/10);
+    comp1->setRect(rectf);
+    qDebug() << rectf.x() << rectf.y() << rectf.width() << rectf.height();
+    scene->addItem(comp1);
+    for(int i=0; i < nodeList.count(); i++)
+    {
+        QDomNode node = nodeList.at(i);
+        QDomElement e = node.toElement(); // try to convert the node to an element.
+        if(!e.isNull()) {
+            QDomAttr pol =  e.attributeNode("polarity");
+            QDomAttr x =  e.attributeNode("x");
+            QDomAttr y =  e.attributeNode("y");
+            QDomAttr name =  e.attributeNode("name");
+            qDebug() << pol.value() << x.value() << y.value() << name.value();
+            if(pol.value().compare("Input",Qt::CaseInsensitive) == 0){
+                Port* port = new Port( name.value());
+                comp1->addPort(*port, (x.value().toInt()+60)/10,y.value().toInt()/10);
+            }
+            else{
+                Port* port = new Port( name.value(),Port::OUT);
+                comp1->addPort(*port, (x.value().toInt()-70)/10,y.value().toInt()/10);
+            }
+        }
+    }
+
+
+
+    //    QDomNode n = docElem.firstChild();
+//    while(!n.isNull()) {
+//        QDomElement e = n.toElement(); // try to convert the node to an element.
+//        if(!e.isNull()) {
+//            qDebug() << e.tagName(); // the node really is an element.
+//        }
+//        n = n.nextSibling();
+//    }
+}
+
+void MainWindow::refreshTreeView()
+{
+
+    //if(ArchiveDirectory.isEmpty())
+    QString archiveDirectory =  QApplication::applicationDirPath();
+
+    QFileSystemModel* filemodel =  new QFileSystemModel;
+    QFileInfo fi(archiveDirectory);
+    filemodel->setRootPath(fi.canonicalFilePath());
+    QStringList filter("*.sym");
+    filemodel->setNameFilters(filter);
+    filemodel->setNameFilterDisables(false);
+
+    treeView->setModel(filemodel);
+    treeView->setRootIndex(filemodel->index(fi.canonicalFilePath()));
+
+    treeView->selectionModel()->setCurrentIndex(filemodel->index(fi.canonicalFilePath()),QItemSelectionModel::Select);
+    treeView->expand(filemodel->index(fi.canonicalFilePath()));
+    filemodel->setRootPath(fi.canonicalFilePath());
+    QHeaderView* header = treeView->header();
+    header->hideSection(1);
+    header->hideSection(2);
+    //header->hideSection(3);
+    header->resizeSection(0,300);
+}
+
+void MainWindow::treeView_doubleClicked(QModelIndex index)
+{
+    qDebug() << treeView->selectionModel()->currentIndex().data().toString();
+    if(!index.isValid())
+        return;
+    QFileSystemModel* fileModel = qobject_cast<QFileSystemModel*>(treeView->model());
+    if(fileModel->isDir(index) || fileModel->fileInfo(index).suffix() != "sym")
+        return;
+
+    parse(fileModel->filePath(index));
+   // parse();
+}
+
+void MainWindow::slider_valueChanged(int value)
+{
+    double newScale = QString::number(value).toDouble() ;
+    QMatrix oldMatrix = view->matrix();
+    view->resetMatrix();
+    view->translate(oldMatrix.dx(), oldMatrix.dy());
+    view->scale(newScale, newScale);
+    qDebug() << value << newScale;
+}

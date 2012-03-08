@@ -1,0 +1,33 @@
+/****************************************************************************
+    AUTHOR: Shaun Katz
+            University of Cape Town (UCT)
+            Department of Electrical Engineering
+            Software Defined Radio Group (SDRG)
+    DATE:   02/03/2012
+****************************************************************************/
+
+#ifndef WIRE_H
+#define WIRE_H
+
+#include "port.h"
+
+class Wire
+{
+public:
+    Wire(Port source = Port(), Port destination = Port(), int id = 0);
+    Wire(Wire* ref);
+
+    Port& source();
+    void setSource(Port source);
+    Port& destination();
+    void setDestination(Port destination);
+    int id();
+    void setId(int id);
+
+private:
+    Port d_source;
+    Port d_destination;
+    int d_id;
+};
+
+#endif // WIRE_H

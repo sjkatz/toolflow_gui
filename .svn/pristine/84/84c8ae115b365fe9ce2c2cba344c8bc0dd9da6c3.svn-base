@@ -1,0 +1,46 @@
+#include "component.h"
+
+Component::Component(QString name, QList<Port*> ports, int id)
+{
+    setName(name);
+    setPorts(ports);
+    setId(id);
+}
+
+Component::Component(Component* ref)
+{
+    setName(ref->name());
+    setPorts(ref->ports());
+    setId(ref->id());
+}
+
+int Component::id()
+{
+    return d_id;
+}
+
+void Component::setId(int id)
+{
+    d_id = id;
+}
+
+QList<Port*> Component::ports()
+{
+    return d_ports;
+}
+
+void Component::setPorts(QList<Port*> ports)
+{
+    d_ports = ports;
+}
+
+QString Component::name()
+{
+    return d_name;
+}
+
+void Component::setName(QString name)
+{
+    d_name = name;
+}
+

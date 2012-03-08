@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<symbol version="7" name="GPMC_Core">
+    <symboltype>BLOCK</symboltype>
+    <timestamp>2011-10-19T13:50:50</timestamp>
+    <pin polarity="Input" x="0" y="-608" name="fpga_data_i(15:0)" />
+    <pin polarity="Input" x="928" y="-512" name="gpmc_a(10:1)" />
+    <pin polarity="Input" x="752" y="0" name="gpmc_clk_i" />
+    <pin polarity="Input" x="464" y="-928" name="gpmc_n_adv_ale" />
+    <pin polarity="Input" x="176" y="-928" name="gpmc_n_cs(6:0)" />
+    <pin polarity="Input" x="368" y="-928" name="gpmc_n_oe" />
+    <pin polarity="Input" x="272" y="-928" name="gpmc_n_we" />
+    <pin polarity="Input" x="560" y="-928" name="gpmc_n_wp" />
+    <pin polarity="Input" x="176" y="0" name="sys_clk" />
+    <pin polarity="BiDirectional" x="928" y="-416" name="gpmc_d(15:0)" />
+    <pin polarity="Output" x="0" y="-512" name="fpga_data_o(15:0)" />
+    <pin polarity="Output" x="0" y="-272" name="gpio(15:0)" />
+    <pin polarity="Output" x="656" y="-928" name="gpmc_busy_0" />
+    <pin polarity="Output" x="752" y="-928" name="gpmc_busy_1" />
+    <pin polarity="Output" x="0" y="-368" name="led(7:0)" />
+    <graph>
+        <attrtext style="alignment:CENTER;fontsize:56;fontname:Arial" attrname="SymbolName" x="464" y="-464" type="symbol" />
+        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-608" type="pin fpga_data_i(15:0)" />
+        <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="856" y="-512" type="pin gpmc_a(10:1)" />
+        <attrtext style="alignment:VLEFT;fontsize:24;fontname:Arial" attrname="PinName" x="752" y="-72" type="pin gpmc_clk_i" />
+        <attrtext style="alignment:VRIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="464" y="-856" type="pin gpmc_n_adv_ale" />
+        <attrtext style="alignment:VRIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="176" y="-856" type="pin gpmc_n_cs(6:0)" />
+        <attrtext style="alignment:VRIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="368" y="-856" type="pin gpmc_n_oe" />
+        <attrtext style="alignment:VRIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="272" y="-856" type="pin gpmc_n_we" />
+        <attrtext style="alignment:VRIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="560" y="-856" type="pin gpmc_n_wp" />
+        <attrtext style="alignment:VLEFT;fontsize:24;fontname:Arial" attrname="PinName" x="176" y="-72" type="pin sys_clk" />
+        <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="856" y="-416" type="pin gpmc_d(15:0)" />
+        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-512" type="pin fpga_data_o(15:0)" />
+        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-272" type="pin gpio(15:0)" />
+        <attrtext style="alignment:VRIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="656" y="-856" type="pin gpmc_busy_0" />
+        <attrtext style="alignment:VRIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="752" y="-856" type="pin gpmc_busy_1" />
+        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-368" type="pin led(7:0)" />
+        <rect width="800" x="64" y="-864" height="800" />
+        <line x2="656" y1="-864" y2="-928" x1="656" />
+        <line x2="752" y1="-864" y2="-928" x1="752" />
+        <line x2="464" y1="-864" y2="-928" x1="464" />
+        <line x2="176" y1="-864" y2="-928" x1="176" />
+        <rect width="24" x="164" y="-928" height="64" />
+        <line x2="368" y1="-864" y2="-928" x1="368" />
+        <line x2="272" y1="-864" y2="-928" x1="272" />
+        <line x2="560" y1="-864" y2="-928" x1="560" />
+        <line x2="176" y1="-64" y2="0" x1="176" />
+        <line x2="0" y1="-608" y2="-608" x1="64" />
+        <rect width="64" x="0" y="-620" height="24" />
+        <line x2="0" y1="-512" y2="-512" x1="64" />
+        <rect width="64" x="0" y="-524" height="24" />
+        <line x2="928" y1="-512" y2="-512" x1="864" />
+        <rect width="64" x="864" y="-524" height="24" />
+        <line x2="928" y1="-416" y2="-416" x1="864" />
+        <rect width="64" x="864" y="-428" height="24" />
+        <line x2="752" y1="-64" y2="0" x1="752" />
+        <line x2="0" y1="-272" y2="-272" x1="64" />
+        <rect width="64" x="0" y="-284" height="24" />
+        <line x2="0" y1="-368" y2="-368" x1="64" />
+        <rect width="64" x="0" y="-380" height="24" />
+    </graph>
+</symbol>

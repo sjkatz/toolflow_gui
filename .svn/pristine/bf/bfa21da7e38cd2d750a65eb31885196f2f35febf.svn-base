@@ -1,0 +1,24 @@
+/****************************************************************************
+    AUTHOR: Shaun Katz
+            University of Cape Town (UCT)
+            Department of Electrical Engineering
+            Software Defined Radio Group (SDRG)
+    DATE:   02/03/2012
+****************************************************************************/
+
+
+GUI Requirements from SKA
+=====
+1. Firstly we would need a block diagram based GUI, with a list of blocks that can be dragged into a design area. (Similar to the current Matlab/Simulink setup)
+2. These blocks need to be able to support ports and parameters, and have a description of what the block does.
+3. Obviously it must have the ability to connect up blocks with "wires"
+4. Blocks will need to be able to be resized.
+5. The GUI will have to redraw blocks on a parameter change. As a parameter can change the number of I/O ports on a block.
+6. It would be very useful to have colour coded blocks, ie interfaces (controllers), primitives, DPS blocks etc
+7. A neat way of doing the GUI would be as a web server. So it could be run on a server and you could do all your design through a browser. Alternately ssh -X could be used.
+8. Provide the ability to group a number of blocks together to create another block. See the Simulink subsystem functionality.
+9. Grouping of wires into buses.
+10. Labeled bus widths on the wires, and possibly auto propagation of these bit widths between blocks. (Partially a design-flow requirement)
+11. The GUI could also provide a view of the project source code, in a similar style to eclipse, where one can follow instantiations back to the implementation of modules and visa-versa.
+12. The GUI must show real-time any syntax errors in the project code, similar to the way eclipse handles Java projects.
+13. The compilation and synthesis tools must be hooked into the GUI and able to be run from with in the design-flow.

@@ -1,0 +1,56 @@
+/****************************************************************************
+    AUTHOR: Shaun Katz
+            University of Cape Town (UCT)
+            Department of Electrical Engineering
+            Software Defined Radio Group (SDRG)
+    DATE:   02/03/2012
+****************************************************************************/
+
+#include "component.h"
+
+Component::Component(QString name, QList<Port*> ports, int id, QGraphicsItem *parent, QGraphicsScene *scene)
+    : QGraphicsRectItem(parent,scene)
+{
+    setName(name);
+    setPorts(ports);
+    setId(id);
+    setRect(0,0,10,10);
+}
+
+//Component::Component(Component* ref)
+//{
+//    setName(ref->name());
+//    setPorts(ref->ports());
+//    setId(ref->id());
+//}
+
+int Component::id()
+{
+    return d_id;
+}
+
+void Component::setId(int id)
+{
+    d_id = id;
+}
+
+QList<Port*> Component::ports()
+{
+    return d_ports;
+}
+
+void Component::setPorts(QList<Port*> ports)
+{
+    d_ports = ports;
+}
+
+QString Component::name()
+{
+    return d_name;
+}
+
+void Component::setName(QString name)
+{
+    d_name = name;
+}
+

@@ -1,0 +1,38 @@
+/****************************************************************************
+    AUTHOR: Shaun Katz
+            University of Cape Town (UCT)
+            Department of Electrical Engineering
+            Software Defined Radio Group (SDRG)
+    DATE:   02/03/2012
+****************************************************************************/
+
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
+
+#include "mygraphicsview.h"
+
+#include <QMainWindow>
+#include <QGraphicsScene>
+
+namespace Ui {
+    class MainWindow;
+}
+
+class MainWindow : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    explicit MainWindow(QWidget *parent = 0);
+    ~MainWindow();
+
+protected:
+    void changeEvent(QEvent *e);
+
+private:
+    Ui::MainWindow *ui;
+    QGraphicsScene* scene;
+    QGraphicsView* view;
+};
+
+#endif // MAINWINDOW_H

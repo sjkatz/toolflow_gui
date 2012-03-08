@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<symbol version="7" name="AD9510_Control_Core">
+    <symboltype>BLOCK</symboltype>
+    <timestamp>2011-11-1T16:27:45</timestamp>
+    <pin polarity="Output" x="0" y="-256" name="ad9510_n_cs" />
+    <pin polarity="Output" x="0" y="-192" name="ad9510_sclk" />
+    <pin polarity="Output" x="0" y="-128" name="ad9510_sdata" />
+    <pin polarity="Output" x="0" y="-64" name="vco_pwr_en" />
+    <pin polarity="Input" x="528" y="-256" name="clk" />
+    <pin polarity="Input" x="528" y="-192" name="rst" />
+    <pin polarity="Input" x="528" y="-128" name="init_ena" />
+    <pin polarity="Output" x="528" y="-64" name="init_done" />
+    <graph>
+        <rect width="400" x="64" y="-320" height="320" />
+        <attrtext style="alignment:BCENTER;fontsize:56;fontname:Arial" attrname="SymbolName" x="264" y="-328" type="symbol" />
+        <line x2="0" y1="-256" y2="-256" x1="64" />
+        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-256" type="pin ad9510_n_cs" />
+        <line x2="0" y1="-192" y2="-192" x1="64" />
+        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-192" type="pin ad9510_sclk" />
+        <line x2="0" y1="-128" y2="-128" x1="64" />
+        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-128" type="pin ad9510_sdata" />
+        <line x2="0" y1="-64" y2="-64" x1="64" />
+        <attrtext style="fontsize:24;fontname:Arial" attrname="PinName" x="72" y="-64" type="pin vco_pwr_en" />
+        <line x2="528" y1="-256" y2="-256" x1="464" />
+        <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="456" y="-256" type="pin clk" />
+        <line x2="528" y1="-192" y2="-192" x1="464" />
+        <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="456" y="-192" type="pin rst" />
+        <line x2="528" y1="-128" y2="-128" x1="464" />
+        <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="456" y="-128" type="pin init_ena" />
+        <line x2="528" y1="-64" y2="-64" x1="464" />
+        <attrtext style="alignment:RIGHT;fontsize:24;fontname:Arial" attrname="PinName" x="456" y="-64" type="pin init_done" />
+    </graph>
+</symbol>

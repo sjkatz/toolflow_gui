@@ -1,0 +1,14 @@
+INPUT(
+./release\main.o
+./release\mainwindow.o
+./release\port.o
+./release\component.o
+./release\wire.o
+./release\archivetreeview.o
+./release\graphicsscene.o
+./release\parser.o
+./release\graphicsview.o
+./release\moc_mainwindow.o
+./release\moc_graphicsscene.o
+./release\moc_graphicsview.o
+);

@@ -1,0 +1,26 @@
+#-------------------------------------------------
+#
+# Project created by QtCreator 2012-03-01T18:47:34
+#
+#-------------------------------------------------
+
+QT       += core gui
+
+TARGET = Rome
+TEMPLATE = app
+UI_DIR = ui
+
+SOURCES += \
+        src/main.cpp\
+        src/mainwindow.cpp \
+        src/port.cpp \
+        src/component.cpp \
+        src/wire.cpp
+
+HEADERS  += \
+        src/mainwindow.h \
+        src/port.h \
+        src/component.h \
+        src/wire.h
+
+FORMS    += src/mainwindow.ui

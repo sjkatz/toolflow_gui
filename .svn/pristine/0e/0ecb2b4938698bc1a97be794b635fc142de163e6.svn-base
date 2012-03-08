@@ -1,0 +1,130 @@
+/****************************************************************************
+    AUTHOR: Shaun Katz
+            University of Cape Town (UCT)
+            Department of Electrical Engineering
+            Software Defined Radio Group (SDRG)
+    DATE:   02/03/2012
+****************************************************************************/
+
+#include "wire.h"
+#include <QPainter>
+
+#include <math.h>
+
+const qreal Pi = 3.14;
+
+Wire::Wire(Port* source, Port* destination, int id, QGraphicsItem *parent, QGraphicsScene *scene)
+    : QGraphicsLineItem(parent, scene)
+{
+    setSource(source);
+    setDestination(destination);
+    setId(id);
+}
+
+Wire::Wire(Wire& ref)
+    : QGraphicsLineItem(ref.parentItem(), ref.scene())
+{
+    setSource(ref.source());
+    setDestination(ref.destination());
+    setId(ref.id());
+}
+
+Port* Wire::source()
+{
+    return d_source;
+}
+
+void Wire::setSource(Port* source)
+{
+    d_source = source;
+}
+
+Port* Wire::destination()
+{
+    return d_destination;
+}
+
+void Wire::setDestination(Port* destination)
+{
+    d_destination = destination;
+}
+
+int Wire::id()
+{
+    return d_id;
+}
+
+void Wire::setId(int id)
+{
+    d_id = id;
+}
+
+QRectF Wire::boundingRect() const
+{
+    qreal extra = (pen().width() + 20) / 2.0;
+
+    return QRectF(line().p1(), QSizeF(line().p2().x() - line().p1().x(),
+                                      line().p2().y() - line().p1().y()))
+        .normalized()
+        .adjusted(-extra, -extra, extra, extra);
+}
+
+void Wire::updatePosition()
+{
+    QLineF line(mapFromItem(d_source, 0, 0), mapFromItem(d_destination, 0, 0));
+    setLine(line);
+}
+
+void Wire::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
+          QWidget *)
+{
+    if (d_source->collidesWithItem(d_destination))
+        return;
+
+    QPen myPen = pen();
+    //myPen.setColor(myColor);
+    qreal arrowSize = 20;
+    painter->setPen(myPen);
+    //painter->setBrush(myColor);
+
+    QLineF centerLine(d_source->pos(), d_destination->pos());
+    QLineF endLine = d_destination->line();
+    QPointF p1 = endLine.p1() + d_destination->pos();
+    QPointF p2;
+    QPointF intersectPoint;
+    QLineF polyLine;
+    //for (int i = 1; i < endLine.count(); ++i) {
+    p2 = endLine.p2() + d_destination->pos();
+    polyLine = QLineF(p1, p2);
+    QLineF::IntersectType intersectType = polyLine.intersect(centerLine, &intersectPoint);
+    //if (intersectType == QLineF::BoundedIntersection)
+        //break;
+        p1 = p2;
+    //}
+
+    setLine(QLineF(intersectPoint, d_source->pos()));
+
+    double angle = acos(line().dx() / line().length());
+    if (line().dy() >= 0)
+        angle = (Pi * 2) - angle;
+
+        QPointF arrowP1 = line().p1() + QPointF(sin(angle + Pi / 3) * arrowSize,
+                                        cos(angle + Pi / 3) * arrowSize);
+        QPointF arrowP2 = line().p1() + QPointF(sin(angle + Pi - Pi / 3) * arrowSize,
+                                        cos(angle + Pi - Pi / 3) * arrowSize);
+
+        //arrowHead.clear();
+        //arrowHead << line().p1() << arrowP1 << arrowP2;
+
+        painter->drawLine(line());
+       // painter->drawPolygon(arrowHead);
+        //if (isSelected()) {
+        //    painter->setPen(QPen(myColor, 1, Qt::DashLine));
+//        QLineF myLine = line();
+//        myLine.translate(0, 4.0);
+//        painter->drawLine(myLine);
+//        myLine.translate(0,-8.0);
+//        painter->drawLine(myLine);
+//    }
+}
+
