@@ -8,6 +8,8 @@
 
 #include "component.h"
 #include "wire.h"
+#include "propertydialog.h"
+#include "propertymodel.h"
 
 #include <QDebug>
 #include <QGraphicsSceneHoverEvent>
@@ -17,7 +19,7 @@
 #include <QPointer>
 #include <QGraphicsItem>
 
-Component::Component(QString name, QList<Port*> ports, int id, QGraphicsItem *parent, QGraphicsScene *scene)
+Component::Component(QString name, QList<Port*> ports, QString id, QGraphicsItem *parent, QGraphicsScene *scene)
     : QGraphicsItemGroup(parent,scene)
 {
     setName(name);
@@ -31,6 +33,8 @@ Component::Component(QString name, QList<Port*> ports, int id, QGraphicsItem *pa
     setHandlesChildEvents(false);
     //setAcceptHoverEvents(true);
 
+    d_port_count = 0;
+
 }
 
 //Component::Component(Component* ref)
@@ -39,17 +43,17 @@ Component::Component(QString name, QList<Port*> ports, int id, QGraphicsItem *pa
 //    setPorts(ref->ports());
 //    setId(ref->id());
 //}
+
 Component::~Component()
 {
-    //delete d_line;
 }
 
-int Component::id()
+QString Component::id()
 {
     return d_id;
 }
 
-void Component::setId(int id)
+void Component::setId(QString id)
 {
     d_id = id;
 }
@@ -84,21 +88,51 @@ void Component::setRect(QRectF rect)
     d_rect = rect;
 }
 
+QMap<QString,QVariant> Component::data()
+{
+    return d_data;
+}
+
+void Component::setData(QMap<QString,QVariant> data)
+{
+    d_data = data;
+}
+
 void Component::addPort(Port& port, int x, int y)
 {
-    port.translate(x,y);
+    if(port.id().isEmpty()){
+        d_port_count++;
+        port.setId(QString("P%1").arg(d_port_count));
+    }
+    else
+    {
+        int portID = port.id().split("P").last().toInt();
+        if(d_port_count < portID)
+            d_port_count = portID;
+    }
+    port.setPos(x,y);
     d_ports.append(&port);
     addToGroup(&port);
 
+}
+
+Port* Component::findPort(QString id)
+{
+    foreach(Port* port, d_ports)
+    {
+        if(port->id() == id)
+            return port;
+    }
+
+    return 0;
 }
 
 void Component::paint(QPainter *painter,
                            const QStyleOptionGraphicsItem *option,
                            QWidget *widget)
 {
-    QPen pen;
     if(isSelected()){
-        pen = QPen(Qt::blue);
+        d_pen = QPen(Qt::red,0.5);
 
         QList<QGraphicsItem *> overlapItems = collidingItems();
 
@@ -111,23 +145,40 @@ void Component::paint(QPainter *painter,
         setZValue(zValue);
 
     }else{
-        pen = QPen(Qt::black);
+        d_pen = QPen(Qt::black,0.5);
     }
-    painter->setPen(pen);
+    painter->setPen(d_pen);
     painter->setBrush(QBrush(Qt::white));
     painter->drawRect(d_rect);
 
+//    painter->setRenderHint(QPainter::Antialiasing,true);
+//    painter->setRenderHint(QPainter::TextAntialiasing,true);
+//    painter->setRenderHint(QPainter::SmoothPixmapTransform,true);
+
     QRectF rect(d_rect.x(), d_rect.y()-2.5,d_rect.width(),2);
+
     QFont font = QApplication::font();
     font.setPixelSize( rect.height() );
+    font.setLetterSpacing(QFont::PercentageSpacing,140);
     painter->setFont( font );
     painter->drawText(rect, Qt::AlignCenter, name());
 }
 
 QRectF Component::boundingRect() const
 {
+    qreal extra = (d_pen.width());
 
-    return QRectF(d_rect.x(), d_rect.y()-2.5, d_rect.width(), d_rect.height()+2.5);
+    return QRectF(d_rect.x(), d_rect.y()-2.5, d_rect.width(), d_rect.height()+2.5).normalized()
+            .adjusted(-extra, -extra, extra, extra);;
+}
+
+void Component::mouseDoubleClickEvent ( QGraphicsSceneMouseEvent  * event )
+{
+    PropertyDialog* propertyDialog = new PropertyDialog(this);
+    if(propertyDialog->exec()){
+        PropertyModel* model = qobject_cast<PropertyModel*>(propertyDialog->view()->model());
+        d_data = model->propertyMap();
+    }
 }
 
 

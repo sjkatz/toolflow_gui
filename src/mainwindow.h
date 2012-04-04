@@ -14,7 +14,9 @@
 #include "graphicsview.h"
 
 #include <QMainWindow>
+#include <QUndoStack>
 //#include <QGraphicsScene>
+#include <QProcess>
 
 namespace Ui {
     class MainWindow;
@@ -39,20 +41,36 @@ private:
     GraphicsScene* scene;
     GraphicsView* view;
     QAction* action_open;
+    QAction* action_export;
+    QAction* action_save;
     QAction* action_delete;
     QAction* action_wire;
     QAction* action_select;
+    QAction* action_undo;
+    QAction* action_redo;
+    QAction* action_execute;
     ArchiveTreeView* treeView;
+    QUndoStack* undo_stack;
+    QProcess* proc;
 
 private slots:
     void actionOpen_Triggered();
+    void actionExport_Triggered();
+    void actionExecute_Triggered(QStringList args = QStringList());
+    void rightMessage();
+    void wrongMessage();
+    void actionSave_Triggered();
     void actionWire_Triggered();
     void actionSelect_Triggered();
     void actionDelete_Triggered();
     void refreshTreeView();
     void treeView_doubleClicked(QModelIndex index);
+    void treeProcessWidget_doubleClicked(QModelIndex index);
     void slider_valueChanged(int value);
-    void scene_selectionChanged();
+    void itemMoved(QGraphicsItem*,QPointF);
+    void addGraphicsItem(QGraphicsItem*);
+    void undoStack_CleanChanged(bool is_clean);
+
 };
 
 #endif // MAINWINDOW_H

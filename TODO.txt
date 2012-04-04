@@ -24,9 +24,17 @@ GUI Requirements from SKA
 13. The compilation and synthesis tools must be hooked into the GUI and able to be run from with in the design-flow.
 
 TODO
+=================================================================================
+|No.|  TASK                                                         | STATUS    |
+=================================================================================
+|1. |  Indicate when hovering over port anchor points in WireMode   | - STARTED |
+|2. |  Manhattan wiring                                             | - STARTED |
+|3. |  Background brush                                             | - STARTED |
+|4. |  Pan & Zoom                                                   | - DONE    |
+|5. |  Drag & Drop from TreeView                                    | - DONE    |
+=================================================================================
+
+BUGS
 =====
-1.  Indicate when hovering over port anchor points in WireMode
-2.  Manhattan wiring
-3.  Background brush
-4.  Pan & Zoom
-5.  Drag & Drop from TreeView
+1. Crashes when deleting folders though explorer.   WINDOWS
+2. Item brush colour.                               LINUX

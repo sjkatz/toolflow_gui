@@ -42,8 +42,9 @@ int main(int argc, char *argv[])
     a.setApplicationName("Rome");
     a.setApplicationVersion(VERSION);
     //a.setWindowIcon(QIcon(ICON_APPLICATION));
+    //a.setFont(QFont("Times", 12));
     MainWindow w;
-    w.setWindowTitle(a.applicationName() + " v" + a.applicationVersion());
+    w.setWindowTitle("New Design[*] - " + a.applicationName() + " v" + a.applicationVersion());
     w.show();
     center(w);
 

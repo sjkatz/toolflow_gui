@@ -9,6 +9,8 @@
 QT       += core gui \
             xml
 
+#CONFIG += console
+
 TARGET = Rome
 TEMPLATE = app
 UI_DIR = ui
@@ -22,7 +24,10 @@ SOURCES += \
         src/archivetreeview.cpp \
         src/graphicsscene.cpp \
         src/parser.cpp \
-        src/graphicsview.cpp
+        src/graphicsview.cpp \
+    src/commands.cpp \
+    src/propertydialog.cpp \
+    src/propertymodel.cpp
 
 HEADERS  += \
         src/mainwindow.h \
@@ -33,13 +38,18 @@ HEADERS  += \
         src/graphicsscene.h \
         src/constants.h \
         src/parser.h \
-        src/graphicsview.h
+        src/graphicsview.h \
+    src/commands.h \
+    src/propertydialog.h \
+    src/propertymodel.h
 
-FORMS    += src/mainwindow.ui
+FORMS    += src/mainwindow.ui \
+    src/propertydialog.ui
 
 OTHER_FILES += \
     TODO.txt \
     MILESTONES.txt
+
 
 
 

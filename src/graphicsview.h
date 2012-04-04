@@ -27,6 +27,7 @@ protected:
     virtual void mouseMoveEvent(QMouseEvent* event);
     virtual void wheelEvent(QWheelEvent* event);
     virtual void resizeEvent(QResizeEvent* event);
+    virtual void drawBackground(QPainter *, const QRectF &);
 };
  
 #endif // GRAPHICSVIEW_H

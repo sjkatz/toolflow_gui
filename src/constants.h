@@ -16,8 +16,12 @@
 #define ICON_SELECT                 QApplication::applicationDirPath() + "/../images/select.png"
 #define ICON_WIRE                   QApplication::applicationDirPath() + "/../images/wire.png"
 #define ICON_OPEN                   QApplication::applicationDirPath() + "/../images/open.png"
+#define ICON_SAVE                   QApplication::applicationDirPath() + "/../images/save.png"
+#define ICON_EXPORT                 QApplication::applicationDirPath() + "/../images/export.png"
+#define ICON_EXECUTE                QApplication::applicationDirPath() + "/../images/execute.png"
 #define ICON_DELETE                 QApplication::applicationDirPath() + "/../images/delete.png"
-
+#define ICON_UNDO                   QApplication::applicationDirPath() + "/../images/undo.png"
+#define ICON_REDO                   QApplication::applicationDirPath() + "/../images/redo.png"
 
 
 #define SHORTCUT_DELETE             "Del"

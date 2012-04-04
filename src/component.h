@@ -19,35 +19,41 @@ class Component : public QGraphicsItemGroup
 public:
     enum { Type = /*UserType + */256 };
 
-    Component(QString name, QList<Port*> ports = QList<Port*>(), int id = 0, QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
+    Component(QString name, QList<Port*> ports = QList<Port*>(), QString id = QString(), QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
     //Component(Component* ref);
     ~Component();
 
     int type() const
         { return Type; }
 
-    int id();
-    void setId(int id);
+    QString id();
+    void setId(QString id);
     QList<Port*> ports();
     void setPorts(QList<Port*> ports);
     QString name();
     void setName(QString& name);
     QRectF rect();
     void setRect(QRectF rect);
+    QMap<QString,QVariant> data();
+    void setData(QMap<QString,QVariant> data);
 
     void addPort(Port& port, int x = 0, int y = 0);
+    Port* findPort(QString id);
 
 private:
     void paint( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0 );
     QRectF boundingRect() const;
+    void mouseDoubleClickEvent ( QGraphicsSceneMouseEvent * event );
 
 
 private:
-    int d_id;
+    QString d_id;
     QList<Port*> d_ports;
     QString d_name;
     QRectF d_rect;
     QGraphicsLineItem* d_line;
+    int d_port_count;
+    QPen d_pen;
+    QMap<QString,QVariant> d_data;
 };
-
 #endif // COMPONENT_H

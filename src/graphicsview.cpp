@@ -1,6 +1,7 @@
 
 //Our includes
 #include "graphicsview.h"
+#include "math.h"
  
 //Qt includes
 #include <QGraphicsScene>
@@ -44,6 +45,8 @@ GraphicsView::GraphicsView(QWidget* parent) : QGraphicsView(parent) {
  /*    setSceneRect(0, 0, 1000, 1000);
      SetCenter(QPointF(500.0, 500.0));*/ //A modified version of centerOn(), handles special cases
     //setCursor(Qt::OpenHandCursor);
+    //setMouseTracking(true);
+    setDragMode(QGraphicsView::RubberBandDrag);
 }
  
 /**
@@ -105,7 +108,7 @@ void GraphicsView::SetCenter(const QPointF& centerPoint) {
   * Handles when the mouse button is pressed
   */
 void GraphicsView::mousePressEvent(QMouseEvent* event) {
-    if(event->modifiers() != Qt::AltModifier)
+    if(event->modifiers() != Qt::ControlModifier)
     {
         QGraphicsView::mousePressEvent(event);
         return;
@@ -119,9 +122,10 @@ void GraphicsView::mousePressEvent(QMouseEvent* event) {
   * Handles when the mouse button is released
   */
 void GraphicsView::mouseReleaseEvent(QMouseEvent* event) {
-    if(event->modifiers() != Qt::AltModifier)
+    if(event->modifiers() != Qt::ControlModifier)
     {
         QGraphicsView::mouseReleaseEvent(event);
+        setCursor(Qt::ArrowCursor);
         return;
     }
     setCursor(Qt::OpenHandCursor);
@@ -133,7 +137,7 @@ void GraphicsView::mouseReleaseEvent(QMouseEvent* event) {
 */
 void GraphicsView::mouseMoveEvent(QMouseEvent* event) {
 
-    if(event->modifiers() != Qt::AltModifier){
+    if(event->modifiers() != Qt::ControlModifier){
         QGraphicsView::mouseMoveEvent(event);
         return;
     }
@@ -198,4 +202,73 @@ void GraphicsView::resizeEvent(QResizeEvent* event) {
  
     //Call the subclass resize so the scrollbars are updated correctly
     QGraphicsView::resizeEvent(event);
+}
+
+void GraphicsView::drawBackground(QPainter *p, const QRectF &r) {
+    p -> save();
+
+    p -> setRenderHint(QPainter::Antialiasing, false);
+    p -> setRenderHint(QPainter::TextAntialiasing, true);
+    p -> setRenderHint(QPainter::SmoothPixmapTransform, false);
+
+    p -> setPen(Qt::NoPen);
+    p -> setBrush(Qt::white);
+    p -> drawRect(r);
+
+    QRectF drawable_area(rect().x(), rect().y(), rect().width(), rect().height());
+    p -> setPen(Qt::black);
+    p -> setBrush(Qt::NoBrush);
+   // p -> drawRect(drawable_area);
+
+    qreal zoom_factor = matrix().m11();
+    bool draw_grid = true;
+    bool draw_cross = false;
+    int drawn_x_grid = 1;
+    int drawn_y_grid = 1;
+
+    if (zoom_factor < (0.5)) {
+            // pas de grille du tout
+            draw_grid = false;
+    } else if (zoom_factor < 4.0) {
+            // grille a 10 px
+            drawn_x_grid *= 20;
+            drawn_y_grid *= 20;
+    } else if (zoom_factor < 6) {
+            // grille a 2 px (avec croix)
+            drawn_x_grid *= 4;
+            drawn_y_grid *= 4;
+            draw_cross = true;
+    } else {
+            // grille a 1 px (avec croix)
+            draw_cross = true;
+    }
+
+    if (draw_grid) {
+            // dessine les points de la grille
+            p -> setPen(Qt::black);
+            p -> setBrush(Qt::NoBrush);
+            qreal limite_x = r.x() + r.width();
+            qreal limite_y = r.y() + r.height();
+
+            int g_x = (int)ceil(r.x());
+            while (g_x % drawn_x_grid) ++ g_x;
+            int g_y = (int)ceil(r.y());
+            while (g_y % drawn_y_grid) ++ g_y;
+
+            for (int gx = g_x ; gx < limite_x ; gx += drawn_x_grid) {
+                    for (int gy = g_y ; gy < limite_y ; gy += drawn_y_grid) {
+                            if (draw_cross) {
+                                    if (!(gx % 10) && !(gy % 10)) {
+                                            p -> drawLine(QLineF(gx - 0.25, gy, gx + 0.25, gy));
+                                            p -> drawLine(QLineF(gx, gy - 0.25, gx, gy + 0.25));
+                                    } else {
+                                            p -> drawPoint(gx, gy);
+                                    }
+                            } else {
+                                    p -> drawPoint(gx, gy);
+                            }
+                    }
+            }
+    }
+    p -> restore();
 }

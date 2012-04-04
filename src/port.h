@@ -9,10 +9,12 @@
 #ifndef PORT_H
 #define PORT_H
 
+//#include "graphicsscene.h"
 #include <QString>
 #include <QGraphicsItem>
 #include <QPen>
 
+class GraphicsScene;
 
 class Port : public QGraphicsItem
 {
@@ -28,21 +30,23 @@ public:
          };
     enum { Type = /*UserType + */267 };
 
-    Port(QString name = QString(), Direction direction = IN, DataType type = STD_LOGIC, int msb = 0, int lsb = 0, int id = 0, QGraphicsItem * parent = 0, QGraphicsScene *scene = 0);
+    Port(QString name = QString(), Direction direction = IN, DataType type = STD_LOGIC, int msb = 0, int lsb = 0, QString id = QString(), QGraphicsItem * parent = 0, QGraphicsScene *scene = 0);
     Port(Port& ref);
     Port& operator=(Port& ref);
 
     int type() const
         { return Type; }
 
-    int id();
-    void setId(int id);
+    QString id();
+    void setId(QString id);
     QString name();
     void setName(QString name);
     Direction direction();
     void setDirection(Direction direction);
     DataType dataType();
     void setDataType(DataType type);
+    QString directionString();
+    QString dataTypeString();
     int msb();
     void setMsb(int msb);
     int lsb();
@@ -53,14 +57,23 @@ public:
     void setPen(QPen pen);
     QLineF line();
     void setLine(QLineF line);
+    QString parentComponentId();
+
+    float posFactor();
+    GraphicsScene* graphicsScene();
+
 
 private:
     void paint( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0 );
     QRectF boundingRect() const;
     void hoverEnterEvent ( QGraphicsSceneHoverEvent * event );
+    void hoverLeaveEvent ( QGraphicsSceneHoverEvent * event );
+    void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent);
 
 private:
-    int d_id;
+    QString d_id;
     QString d_name;
     Direction d_direction;
     DataType d_type;
@@ -69,7 +82,7 @@ private:
     int d_width;
     QPen d_pen;
     QLineF d_line;
-    QRectF d_anchor;
+    QGraphicsEllipseItem* d_hover_indicator;
 };
 
 #endif // PORT_H
