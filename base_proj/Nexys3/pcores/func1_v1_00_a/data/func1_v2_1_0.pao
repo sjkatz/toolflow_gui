@@ -1,0 +1,7 @@
+##############################################################################
+## Filename:          C:\Users\Shaun\Desktop\tests\test4\pcores/func1_v1_00_a/data/func1_v2_1_0.pao
+## Description:       Peripheral Analysis Order
+## Date:              Tue Mar 13 16:17:53 2012 (by Create and Import Peripheral Wizard)
+##############################################################################
+
+lib func1_v1_00_a func1 vhdl

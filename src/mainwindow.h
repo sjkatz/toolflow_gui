@@ -52,6 +52,7 @@ private:
     ArchiveTreeView* treeView;
     QUndoStack* undo_stack;
     QProcess* proc;
+    QFileInfo project_file;
 
 private slots:
     void actionOpen_Triggered();
@@ -70,6 +71,8 @@ private slots:
     void itemMoved(QGraphicsItem*,QPointF);
     void addGraphicsItem(QGraphicsItem*);
     void undoStack_CleanChanged(bool is_clean);
+    void copyFolder(QString sourceFolder, QString destFolder);
+
 
 };
 

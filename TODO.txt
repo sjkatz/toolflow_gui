@@ -37,4 +37,4 @@ TODO
 BUGS
 =====
 1. Crashes when deleting folders though explorer.   WINDOWS
-2. Item brush colour.                               LINUX
+2. Item brush colour.                               LINUX		FIXED

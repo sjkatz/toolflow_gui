@@ -1,0 +1,44 @@
+HDL language for the peripheral (top level) design unit counter is verilog ...
+INFO:EDK:3391 - Create temporary xst project file:
+   C:\Users\Shaun\Desktop\tests\test2\pcores/counter.prj
+Compiling verilog file "C:/Xilinx/13.4/ISE_DS/ISE/verilog/src/iSE/unisim_comp.v"
+Compiling verilog file "C:\Users\Shaun\Desktop\tests\test2\pcores\counter.prj"
+Compiling verilog include file "C:\Users\Shaun\Desktop\tests\counter.v"
+Module <counter> compiled
+
+
+Analyzing Verilog code ...
+INFO:EDK:1607 - IPTYPE set to value : PERIPHERAL
+INFO:EDK:1511 - IMP_NETLIST set to value : TRUE
+Copying file counter.v to
+C:\Users\Shaun\Desktop\tests\test2\pcores/counter_v1_00_a/hdl/verilog/ ...
+
+Thank you for using Create and Import Peripheral Wizard! Please find your
+imported peripheral under
+C:\Users\Shaun\Desktop\tests\test2\pcores\counter_v1_00_a.
+
+Summary:
+
+  Logical library     : counter_v1_00_a
+  Version             : 1.00.a
+  Bus interface(s)    : None
+
+The following sub-directories will be created:
+
+  - counter_v1_00_a\data
+  - counter_v1_00_a\hdl
+  - counter_v1_00_a\hdl\verilog
+  - counter_v1_00_a\hdl\vhdl
+
+The following HDL source files will be copied into the
+counter_v1_00_a\hdl\verilog directory:
+
+  - counter.v
+
+
+The following files will be created under the counter_v1_00_a\data directory:
+
+  - counter_v2_1_0.mpd
+  - counter_v2_1_0.pao
+
+

@@ -207,13 +207,17 @@ void MainWindow::actionOpen_Triggered()
     QString fileName = QFileDialog::getOpenFileName(
             this,
             tr("Open File"),
-            QApplication::applicationDirPath()+"/../symbols",
+            project_file.canonicalPath(),
             tr("All Files(*.*)") );
 
     if(fileName.isEmpty())
         return;
 
     Parser::fromXML(fileName,scene);
+    project_file = QFileInfo(fileName);
+    setWindowTitle(QString("%1[*] - " + QApplication::applicationName() + " v" + QApplication::applicationVersion())
+                   .arg(fileName));
+    setWindowModified(false);
 }
 
 void MainWindow::actionSave_Triggered()
@@ -221,14 +225,23 @@ void MainWindow::actionSave_Triggered()
     QString fileName = QFileDialog::getSaveFileName(
             this,
             tr("Export File"),
-            QApplication::applicationDirPath()+"/../",
+            project_file.canonicalPath(),
             tr("Extensible Markup Language(*.xml)") );
 
     if(fileName.isEmpty())
         return;
 
     Parser::toXML(fileName,scene);
+    project_file = QFileInfo(fileName);
+    setWindowTitle(QString("%1[*] - " + QApplication::applicationName() + " v" + QApplication::applicationVersion())
+                   .arg(fileName));
     setWindowModified(false);
+
+    //IMPORT BASE_PROJ
+    copyFolder(QApplication::applicationDirPath()+"/../base_proj/Nexys3",project_file.canonicalPath());
+
+    //EXPORT MHS
+    Parser::toMHS(project_file.canonicalPath()+"/system.mhs",scene);
 }
 
 void MainWindow::actionExport_Triggered()
@@ -248,18 +261,18 @@ void MainWindow::actionExecute_Triggered(QStringList args)
 {
     /* create QProcess object */
     proc = new QProcess();
-    proc->setWorkingDirectory("C:/Users/Shaun/Desktop/tests/test6/");
+    proc->setWorkingDirectory(project_file.canonicalPath());
 
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-//    env.insert("XILINX_EDK","C:\\Xilinx\\13.4\\ISE_DS\\EDK"); // Add an environment variable
-    env.insert("PATH", env.value("Path") + ";C:\\Xilinx\\13.4\\ISE_DS\\EDK\\bin\\nt64");
-    proc->setProcessEnvironment(env);
+//    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+
+//    env.insert("PATH", env.value("Path") + ";C:\\Xilinx\\13.4\\ISE_DS\\EDK\\bin\\nt64");
+//    proc->setProcessEnvironment(env);
 
 
     if(args.isEmpty())
         args << "-s" << "-i" << "-g";
 
-    proc->start("C:\\Python23\\python.exe", QStringList() << QString("xps_gen.py") << args);
+    proc->start("C:\\Python27\\python.exe", QStringList() << QString("xps_gen.py") << args);
     //proc->start("cmd", QStringList() << "/k" << QString("xps_gen"));
 
     /* show output */
@@ -418,4 +431,31 @@ void MainWindow::addGraphicsItem(QGraphicsItem* item )
 void MainWindow::undoStack_CleanChanged(bool is_clean)
 {
     setWindowModified(!is_clean);
+}
+
+void MainWindow::copyFolder(QString sourceFolder, QString destFolder)
+{
+    QDir sourceDir(sourceFolder);
+    if(!sourceDir.exists())
+        return;
+    QDir destDir(destFolder);
+    if(!destDir.exists())
+    {
+        destDir.mkdir(destFolder);
+    }
+    QStringList files = sourceDir.entryList(QDir::Files);
+    for(int i = 0; i< files.count(); i++)
+    {
+        QString srcName = sourceFolder + "/" + files[i];
+        QString destName = destFolder + "/" + files[i];
+        QFile::copy(srcName, destName);
+    }
+    files.clear();
+    files = sourceDir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
+    for(int i = 0; i< files.count(); i++)
+    {
+        QString srcName = sourceFolder + "/" + files[i];
+        QString destName = destFolder + "/" + files[i];
+        copyFolder(srcName, destName);
+    }
 }
